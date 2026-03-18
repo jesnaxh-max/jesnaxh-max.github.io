@@ -2,48 +2,150 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garaż - Smart Home</title>
+    <title>Smart Home</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="images/logo.jpg">
 </head>
-<body class="room garaz-bg">
+<body class="home">
 
 <header class="frosted">
     <img src="images/logo.jpg" class="logo">
-    <h1>Garaż</h1>
-    <nav><a href="index.html">Powrót</a></nav>
+    <h1>Smart Home</h1>
+    
+    <nav><a href="#" onclick="logout()">Wyloguj</a></nav>
 </header>
-<br>
-<br>
-<div class="panel animated-panel">
-    <h2>Ustawienia Garażu</h2>
+
+<div class="panel status-panel">
+    <h2>Status domu</h2>
+
+    <p id="statusText">Brak aktywnych urządzeń</p>
 
     <div class="control">
-        <h3>Oświetlenie</h3>
-        <button class="toggle-btn">Włącz światło</button>
+        <h3>Alarm globalny</h3>
+        <button id="globalAlarmBtn" class="toggle-btn">Uzbrój alarm</button>    
     </div>
-
-    <div class="control temp-control">
-        <h3>Temperatura</h3>
-        <input type="range" min="15" max="30" value="18" class="temp-slider" id="temperatureSlider">
-        <p class="temp-display" id="tempDisplay">18°C</p>
-    </div>
-        <button class="btn-confirm" id="confirmButton">Zatwierdź</button>
-        <div class="estimated-time" id="estimatedTime"></div>
-
-    <div class="control">
-        <h3>Brama garażowa</h3>
-        <button class="toggle-btn">Otwórz bramę</button>
-    </div> 
 </div>
 
-<script src="script.js"></script>
+<div class="home-title">
+    <h2>Twoje pomieszczenia</h2>
+</div>
+
+<div class="room-selector" id="rooms"></div>
+
+<div id="toast"></div>
+
 <script>
+if(!localStorage.getItem("logged")){
+    window.location.href = "login.html";
+}
+
+const user = localStorage.getItem("currentUser");
+const rooms = JSON.parse(localStorage.getItem("rooms_" + user)) || [];
+
+const container = document.getElementById("rooms");
+const statusText = document.getElementById("statusText");
+const globalAlarmBtn = document.getElementById("globalAlarmBtn");
+
+rooms.forEach(room => {
+    const el = document.createElement("a");
+    el.className = "room-card";
+    el.href = room + ".html";
+    el.innerHTML = "<h2>" + room.charAt(0).toUpperCase() + room.slice(1) + "</h2>";
+    container.appendChild(el);
+});
+
 function logout(){
     localStorage.removeItem("logged");
     window.location.href = "login.html";
 }
+
+function updateStatus(){
+    let active = [];
+
+    rooms.forEach(room=>{
+        const data = JSON.parse(localStorage.getItem(room));
+        if(data && data.toggles){
+            Object.values(data.toggles).forEach(v=>{
+                if(v) active.push(room);
+            });
+        }
+    });
+
+    const activeText = active.length
+        ? "Aktywne w: " + [...new Set(active)].join(", ")
+        : "Brak aktywnych urządzeń";
+
+    statusText.textContent = activeText;
+}
+
+setInterval(updateStatus,1000);
+
+/* GLOBALNY ALARM */
+let previousStates = JSON.parse(localStorage.getItem("previousStates")) || null;
+let alarmActive = localStorage.getItem("globalAlarm") === "true";
+
+function updateAlarmButton(){
+    if(alarmActive){
+        globalAlarmBtn.classList.add("on");
+        globalAlarmBtn.textContent = "Rozbrój alarm";
+    } else {
+        globalAlarmBtn.classList.remove("on");
+        globalAlarmBtn.textContent = "Uzbrój alarm";
+    }
+}
+
+globalAlarmBtn.onclick = () => {
+
+    if (!alarmActive) {
+
+        previousStates = {};
+
+        rooms.forEach(room => {
+            const data = JSON.parse(localStorage.getItem(room)) || { toggles: {} };
+            previousStates[room] = JSON.parse(JSON.stringify(data));
+
+            Object.keys(data.toggles).forEach(key => {
+                data.toggles[key] = false;
+            });
+
+            localStorage.setItem(room, JSON.stringify(data));
+        });
+
+        localStorage.setItem("previousStates", JSON.stringify(previousStates));
+        localStorage.setItem("globalAlarm", "true");
+        alarmActive = true;
+
+        showToast("Alarm uzbrojony — wszystkie urządzenia wyłączone");
+
+    } else {
+
+        if (previousStates) {
+            Object.keys(previousStates).forEach(room => {
+                localStorage.setItem(room, JSON.stringify(previousStates[room]));
+            });
+        }
+
+        localStorage.removeItem("previousStates");
+        localStorage.setItem("globalAlarm", "false");
+        alarmActive = false;
+
+        showToast("Alarm rozbrojony — poprzedni stan przywrócony");
+    }
+
+    updateAlarmButton();
+};
+
+updateAlarmButton();
+
+function showToast(text){
+    const t = document.getElementById("toast");
+    t.textContent = text;
+    t.classList.add("show");
+
+    setTimeout(()=>t.classList.remove("show"),3000);
+}
 </script>
+
+
 </body>
 </html>
