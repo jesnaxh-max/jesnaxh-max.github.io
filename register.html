@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Rejestracja</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="images/logo.jpg">
+</head>
+<body class="home">
+
+<header class="frosted">
+    <img src="images/logo.jpg" class="logo">
+    <h1>Smart Home</h1>
+    <nav></nav>
+</header>
+
+<div class="panel">
+    <h2>Utwórz konto</h2>
+
+    <div class="control">
+        <input type="text" id="login" placeholder="Login" class="toggle-btn">
+    </div>
+
+    <div class="control">
+        <input type="password" id="password" placeholder="Hasło" class="toggle-btn">
+    </div>
+
+    <button class="btn-confirm" onclick="register()">Zarejestruj</button>
+
+    <p style="color:red;text-align:center;margin-top:10px;" id="registerError"></p>
+
+    <p style="text-align:center;margin-top:15px;">lub</p>
+
+    <button class="toggle-btn" onclick="window.location.href='login.html'">
+        Powrót do logowania
+    </button>
+</div>
+
+<script>
+function register(){
+    const login = document.getElementById("login").value;
+    const password = document.getElementById("password").value;
+    const errorText = document.getElementById("registerError");
+
+    errorText.textContent = "";
+
+    if(!login || !password){
+        errorText.textContent = "Uzupełnij wszystkie pola";
+        return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    if(users.find(u => u.login === login)){
+        errorText.textContent = "Użytkownik o takim loginie już istnieje";
+        return;
+    }
+
+    users.push({login,password});
+    localStorage.setItem("users", JSON.stringify(users));
+
+    window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>

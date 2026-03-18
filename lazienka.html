@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garaż - Smart Home</title>
+    <title>Łazienka - Smart Home</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="images/logo.jpg">
 </head>
-<body class="room garaz-bg">
+<body class="room lazienka-bg">
 
 <header class="frosted">
     <img src="images/logo.jpg" class="logo">
-    <h1>Garaż</h1>
+    <h1>Łazienka</h1>
     <nav><a href="index.html">Powrót</a></nav>
 </header>
 <br>
 <br>
 <div class="panel animated-panel">
-    <h2>Ustawienia Garażu</h2>
+    <h2>Ustawienia Łazienki</h2>
 
     <div class="control">
         <h3>Oświetlenie</h3>
@@ -26,16 +26,17 @@
 
     <div class="control temp-control">
         <h3>Temperatura</h3>
-        <input type="range" min="15" max="30" value="18" class="temp-slider" id="temperatureSlider">
-        <p class="temp-display" id="tempDisplay">18°C</p>
+        <input type="range" min="15" max="30" value="21" class="temp-slider" id="temperatureSlider">
+        <p class="temp-display" id="tempDisplay">21°C</p>
     </div>
-        <button class="btn-confirm" id="confirmButton">Zatwierdź</button>
-        <div class="estimated-time" id="estimatedTime"></div>
+
+    <button class="btn-confirm" id="confirmButton">Zatwierdź</button>
+    <div class="estimated-time" id="estimatedTime"></div>
 
     <div class="control">
-        <h3>Brama garażowa</h3>
-        <button class="toggle-btn">Otwórz bramę</button>
-    </div> 
+        <h3>Wentylator</h3>
+        <button class="toggle-btn">Włącz wentylator</button>
+    </div>
 </div>
 
 <script src="script.js"></script>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Home - Logowanie</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="images/logo.jpg">
+</head>
+<body class="home">
+
+<header class="frosted">
+    <img src="images/logo.jpg" class="logo">
+    <h1>Smart Home</h1>
+    <nav></nav>
+</header>
+
+<div class="panel">
+    <h2>Smart Home</h2>
+
+    <div class="control">
+        <input type="text" id="login" placeholder="Login" class="toggle-btn">
+    </div>
+
+    <div class="control">
+        <input type="password" id="password" placeholder="Hasło" class="toggle-btn">
+    </div>
+
+    <button class="btn-confirm" onclick="login()">Zaloguj</button>
+
+    <p style="color:red;text-align:center;margin-top:10px;" id="loginError"></p>
+
+    <p style="text-align:center;margin-top:15px;">lub</p>
+
+    <button class="toggle-btn" onclick="window.location.href='register.html'">
+        Utwórz konto
+    </button>
+</div>
+
+<script>
+function login(){
+    const login = document.getElementById("login").value;
+    const password = document.getElementById("password").value;
+    const errorText = document.getElementById("loginError");
+
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const user = users.find(u => u.login === login && u.password === password);
+
+    if(user){
+        localStorage.setItem("logged", "true");
+        localStorage.setItem("currentUser", login);
+
+        const rooms = JSON.parse(localStorage.getItem("rooms_" + login));
+
+        if(rooms && rooms.length > 0){
+            window.location.href = "index.html";
+        } else {
+            window.location.href = "setup.html";
+        }
+
+    } else {
+        errorText.textContent = "Błędny login lub hasło";
+    }
+}
+</script>
+
+</body>
+</html>

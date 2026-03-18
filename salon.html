@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salon - Smart Home</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="images/logo.jpg">
+</head>
+<body class="room salon-bg">
+
+<header class="frosted">
+    <img src="images/logo.jpg" class="logo">
+    <h1>Salon</h1>
+    <nav><a href="index.html">Powrót</a></nav>
+</header>
+<br>
+<br>
+<div class="panel animated-panel">
+    <h2>Ustawienia Salonu</h2>
+
+    <div class="control">
+        <h3>Oświetlenie</h3>
+        <button class="toggle-btn">Włącz światło</button>
+    </div>
+
+    <div class="control temp-control">
+        <h3>Temperatura</h3>
+        <input type="range" min="15" max="30" value="22" class="temp-slider" id="temperatureSlider">
+        <p class="temp-display" id="tempDisplay">22°C</p>
+    </div>
+
+    <button class="btn-confirm" id="confirmButton">Zatwierdź</button>
+
+    <div class="estimated-time" id="estimatedTime"></div>
+
+    <div class="control">
+        <h3>Muzyka</h3>
+        <button class="toggle-btn" id="musicToggleBtn">Włącz muzykę</button>
+        <div class="music-player hidden" id="musicPanel">
+            <div class="music-top">
+                <div>
+                    <h3 id="songTitle"></h3>
+                    <p id="songArtist"></p>
+                </div>
+            </div>
+
+            <input type="range" id="songSlider" value="0" min="0" max="100">
+
+            <div class="music-controls">
+                <button id="prevSong" class="music-btn">⏮</button>
+                <button id="playPause" class="music-btn main">▶</button>
+                <button id="nextSong" class="music-btn">⏭</button>
+            </div>
+
+            <div class="volume-control">
+                <span>🔊</span>
+                <input type="range" id="volumeSlider" min="0" max="100" value="50">
+            </div>
+
+            <p id="songTime"></p>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+function logout(){
+    localStorage.removeItem("logged");
+    window.location.href = "login.html";
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Konfiguracja</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="images/logo.jpg">
+</head>
+<body class="home">
+
+<header class="frosted">
+    <img src="images/logo.jpg" class="logo">
+    <h1>Smart Home</h1>
+    <nav><a href="index.html">Powrót</a></nav>
+</header>
+
+<div class="panel">
+    <h2>Wybierz pomieszczenia</h2>
+
+    <div class="checkbox-list">
+        <label class="checkbox-item"><input type="checkbox" value="salon"> <span>Salon</span></label>
+        <label class="checkbox-item"><input type="checkbox" value="garaz"> <span>Garaż</span></label>
+        <label class="checkbox-item"><input type="checkbox" value="sypialnia"> <span>Sypialnia</span></label>
+        <label class="checkbox-item"><input type="checkbox" value="lazienka"> <span>Łazienka</span></label>
+        <label class="checkbox-item"><input type="checkbox" value="kuchnia"> <span>Kuchnia</span></label>
+        <label class="checkbox-item"><input type="checkbox" value="biuro"> <span>Biuro</span></label>
+        <label class="checkbox-item"><input type="checkbox" value="ogrod"> <span>Ogród</span></label>
+    </div>
+
+    <button class="btn-confirm" onclick="saveRooms()">Zapisz</button>
+</div>
+
+<script>
+const user = localStorage.getItem("currentUser");
+const existingRooms = JSON.parse(localStorage.getItem("rooms_" + user));
+
+if(existingRooms && existingRooms.length > 0){
+    window.location.href = "index.html";
+}
+
+function saveRooms(){
+    const selected = [];
+    document.querySelectorAll(".checkbox-list input:checked").forEach(el => selected.push(el.value));
+
+    const user = localStorage.getItem("currentUser");
+    localStorage.setItem("rooms_" + user, JSON.stringify(selected));
+
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
